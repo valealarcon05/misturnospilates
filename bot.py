@@ -17,6 +17,10 @@ HORARIO_DESEADO = "18:00"
 TZ_ARG = ZoneInfo("America/Argentina/Buenos_Aires")
 HORA_APERTURA = "19:00:00"  # hora argentina en que se habilita el turno (23hs antes de la clase)
 
+# El bot corre Domingo/Martes/Jueves a las 19hs para reservar la clase del día SIGUIENTE
+# (Lunes/Miércoles/Viernes) a las 18hs. Domingo 19:00 -> Lunes 18:00 son 23hs = +1 día.
+DIAS_ADELANTE = 1
+
 
 def esperar_hasta_arg(hora_str: str):
     """Duerme con precisión hasta que sea exactamente hora_str en horario argentino."""
@@ -77,7 +81,7 @@ def login(session, headers):
 def buscar_clase(session):
     print("Iniciando Fase 2: Buscando clase en el calendario...")
 
-    fecha_reserva = (datetime.now(TZ_ARG) + timedelta(days=2)).strftime("%Y-%m-%d")
+    fecha_reserva = (datetime.now(TZ_ARG) + timedelta(days=DIAS_ADELANTE)).strftime("%Y-%m-%d")
     print(f"Buscando clases para la fecha: {fecha_reserva}")
 
     calendario_url = (
