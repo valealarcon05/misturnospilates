@@ -4,8 +4,9 @@ on:
     # 21:55 UTC = 18:55 hs Argentina (todo el año, sin horario de verano).
     # Arranca ~5 min antes como colchón por si el runner de GitHub se demora en iniciar;
     # el propio bot.py espera con precisión de milisegundos hasta las 19:00:00 ARG.
-    # Días: Lunes (1), Miércoles (3) y Sábado (6)
-    - cron: '55 21 * * 1,3,6'
+    # Corre Domingo (0), Martes (2) y Jueves (4) a las 19hs,
+    # para reservar la clase del día siguiente (Lunes/Miércoles/Viernes) a las 18hs.
+    - cron: '55 21 * * 0,2,4'
   workflow_dispatch:
 jobs:
   run-bot:
