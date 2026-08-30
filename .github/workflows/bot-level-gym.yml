@@ -1,0 +1,27 @@
+name: Bot Level Gym Reserva
+on:
+  schedule:
+    # 21:55 UTC = 18:55 hs Argentina (todo el año, sin horario de verano).
+    # Arranca ~5 min antes como colchón por si el runner de GitHub se demora en iniciar;
+    # el propio bot.py espera con precisión de milisegundos hasta las 19:00:00 ARG.
+    # Días: Lunes (1), Miércoles (3) y Sábado (6)
+    - cron: '55 21 * * 1,3,6'
+  workflow_dispatch:
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v3
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Instalar dependencias
+        run: |
+          pip install requests beautifulsoup4 tzdata
+      - name: Ejecutar bot de reserva
+        env:
+          LEVEL_USER: ${{ secrets.LEVEL_USER }}
+          LEVEL_PASS: ${{ secrets.LEVEL_PASS }}
+        run: python bot.py
